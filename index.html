@@ -36,6 +36,8 @@
             </div>
         </div>
         <div id="label-container" class="mt-3"></div>
+        <div id="result-description" class="mt-3"></div>
+        <div id="celebrities" class="mt-1"></div>
     </div>
 
     <!-- Bootstrap and TensorFlow.js -->
@@ -46,50 +48,75 @@
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
     <script>
         let model, maxPredictions;
-
+    
+        // Description and celebrities data
+        const descriptions = {
+            "cat": {
+                description: "With your mysterious gaze and graceful movements, you embody the spirit of a cat. You're independent, a bit aloof, but always curious and deeply affectionate to those you trust.",
+                celebrities: "Cat-faced celebrities: Audrey Hepburn, Robert Pattinson, Zoë Kravitz"
+            },
+            "puppy": {
+                description: "With your cute big eyes and a friendly smile, you bring joy to everybody around you! Due to your kind and playful personality, you are always popular with everyone. You become especially more adorable when you are with your bf/gf. When their attention is lacking you can become needy and lonely, but nevertheless are always still so cute, just like a puppy!",
+                celebrities: "Puppy-faced celebrities: Park Bo-young, IU, Jang Won-young (IZ*ONE), Ji-soo (BLACKPINK), Choi Yoo-jung (Wikimiki)"
+            },
+            "rabbit": {
+                description: "Your soft features and gentle demeanor resonate with the quiet charm of a rabbit. You're often calm and composed, and you radiate a soothing presence that people find comforting and warm.",
+                celebrities: "Rabbit-faced celebrities: Taylor Swift, G-Dragon, Jungkook (BTS)"
+            },
+            "dinosaur": {
+                description: "You have a striking presence that can't be ignored, much like the dinosaurs of old. Your bold and dynamic personality makes you stand out in any crowd, commanding attention wherever you go.",
+                celebrities: "Dinosaur-faced celebrities: Chris Pratt (in Jurassic World), Sam Neill"
+            }
+        };
+    
         window.onload = async function () {
             await init();
         };
-
+    
         async function init() {
             const URL = "https://teachablemachine.withgoogle.com/models/q8sOUATEp/";
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
             model = await tmImage.load(modelURL, metadataURL);
             maxPredictions = model.getTotalClasses();
+            
+            // Ensure the label container is properly initialized with div elements for each class
             labelContainer = document.getElementById("label-container");
             for (let i = 0; i < maxPredictions; i++) {
-                labelContainer.appendChild(document.createElement("div"));
+                const div = document.createElement("div");
+                div.id = `label${i}`;  // Assign an ID for easier access
+                labelContainer.appendChild(div);
             }
         }
-
+    
         async function predict() {
             var image = document.getElementById("face-image");
             if (!image.src || image.src === "#") {
                 console.error("Image not loaded yet.");
                 return;
             }
-
+    
             const prediction = await model.predict(image, false);
-            let highestPrediction = {className: "", probability: 0};
-            for (let i = 0; i < maxPredictions; i++) {
-                const element = labelContainer.childNodes[i];
-                const probability = prediction[i].probability.toFixed(2);
-                element.innerHTML = `${prediction[i].className}: ${probability}`;
-                if (probability > highestPrediction.probability) {
-                    highestPrediction = {className: prediction[i].className, probability: probability};
+            let highestPrediction = { className: "", probability: 0 };
+            prediction.forEach((p, index) => {
+                const element = document.getElementById(`label${index}`);
+                const probability = p.probability.toFixed(2);
+                element.innerHTML = `${p.className}: ${probability}`;
+                if (p.probability > highestPrediction.probability) {
+                    highestPrediction = { className: p.className, probability: parseFloat(probability) };
                 }
-            }
+            });
             updateResultDescription(highestPrediction);
         }
-
+    
         function updateResultDescription(highestPrediction) {
-            const descriptionElement = document.createElement("div");
-            descriptionElement.className = 'result-description';
-            descriptionElement.innerHTML = `<h4>You mostly resemble a(n): ${highestPrediction.className}</h4>`;
-            labelContainer.appendChild(descriptionElement);
+            const resultDescription = document.getElementById("result-description");
+            const celebs = document.getElementById("celebrities");
+            const detail = descriptions[highestPrediction.className];
+            resultDescription.innerHTML = `<h4>You mostly resemble a(n): ${highestPrediction.className}</h4><p>${detail.description}</p>`;
+            celebs.textContent = detail.celebrities;
         }
-
+    
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -105,13 +132,13 @@
                 removeUpload();
             }
         }
-
+    
         function removeUpload() {
-            $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+            $('.file-upload-input').replaceWith($('.file-upload-input').clone(true));
             $('.file-upload-content').hide();
             $('.image-upload-wrap').show();
         }
-
+    
         $('.image-upload-wrap').bind('dragover', function () {
             $('.image-upload-wrap').addClass('image-dropping');
         });
@@ -119,6 +146,7 @@
             $('.image-upload-wrap').removeClass('image-dropping');
         });
     </script>
+    
 </body>
 
 </html>
