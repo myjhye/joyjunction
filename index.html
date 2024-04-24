@@ -56,6 +56,15 @@
         </div>
     </nav>
     <section class="section">
+        <div class="emoji-display">
+            <span class="emoji">🐶</span>
+            <span class="emoji">🐱</span>
+            <span class="emoji">🐰</span>
+            <span class="emoji">🦖</span>
+            <span class="emoji">🐻</span>
+            <span class="emoji">🦌</span>
+            <span class="emoji">🦊</span>
+        </div>
         <h1 class="title">Animal Face Test</h1>
         <h2 class="subtitle">AI-based Animal Face Test Using Your Face</h2>
         <h2 class="sr-only">Which animal do you resemble? Find out your animal look-alike!</h2>
@@ -63,21 +72,29 @@
         <h4 class="sr-only">This service utilizes Google's Teachable Machine 2.0 technology.</h4>
         <p class="sr-only">Try the AI animal face test to see which animal you look like! Our AI, trained with representative animal celebrity photos, analyzes your face right on the screen without needing any sign-ups. Your photo data is not transmitted anywhere. Find out your animal type: dog, cat, fox, deer, rabbit, bear, dinosaur? Discover through the face test!</p>
     </section>
+    <div class="space"></div>
     <h3 class="pb-2 d-flex justify-content-center">Choose your gender</h3>
     <section class="d-flex justify-content-center">
-        <p class="d-flex align-items-center pr-3">Female</p>
-        <div>
-            <input type="checkbox" id="gender">
-            <label for="gender">
-                <span class="knob">
-                    <i></i>
-                </span>
-            </label>
+        <div class="col-md-3 d-flex justify-content-end align-items-center pr-1">
+            <p class="m-0">Female</p>
         </div>
-        <p class="d-flex align-items-center pl-3">Male</p>
+        <div class="col-md-1 d-flex justify-content-center align-items-center px-0">
+            <div>
+                <input type="checkbox" id="gender">
+                <label for="gender">
+                    <span class="knob">
+                        <i></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex justify-content-start align-items-center pl-1">
+            <p class="m-0">Male</p>
+        </div>
     </section>
+    
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <div class="mt-3 container file-upload">
+    <div class="container file-upload">
         <div class="image-upload-wrap">
             <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
             <div class="drag-text">
@@ -191,33 +208,33 @@
                 });
                 switch (prediction[0].className) {
                     case "dog":
-                        resultTitle = "Adorable Dog-like Appearance"
-                        resultExplain = "You're affectionate and adorable, bringing joy to everyone around you! Your friendly and lively personality makes you especially lovable to your partner. Just like a puppy, you crave attention and can feel down when it's lacking.";
-                        resultCeleb = "Celebrities with dog-like traits: Kang Daniel, Baekhyun (EXO), Park Bo Gum, Song Joong Ki";
+                        resultTitle = "Loyal  Doggo: Your Tail Wags for Love!"
+                        resultExplain = "You're a man's best friend... literally! Your affectionate and playful personality makes you irresistible, especially to your partner. Like a loyal pup, you shower them with love and attention, and expect the same in return. Just don't leave you hanging for too long, or you might unleash your inner zoomies!"
+                        resultCeleb = "Celebrities with dog-like traits: Kang Daniel - Golden Retriever energy, Baekhyun (EXO) - Playful and full of surprises, Park Bo Gum - Makes everyone smile with his sunshine personality, Song Joong Ki - Everyone's loyal companion"
                         gtag('event', 'Male Result: Dog', {'event_category': 'Male Results'});
                         break;
                     case "cat":
-                        resultTitle = "Mysterious Cat-like Charm"
-                        resultExplain = "Although aloof at first, your enigmatic charm always wins over hearts. With pride matching the best, yet affectionate towards those you care about, you keep your partner constantly enchanted.";
-                        resultCeleb = "Celebrities with cat-like traits: Hwang Min Hyun (NU'EST), Xiumin (EXO), Kang Dong Won, Lee Jong Suk, Lee Joon Gi";
+                        resultTitle = "The Enigmatic  Cat: Cool Cat with a Hidden Purr"
+                        resultExplain = "You might come across as mysterious at first, but that only adds to your charm. You have a cool confidence with a surprising amount of affection for those who deserve it. Your partner is constantly trying to unravel your hidden depths, and that's what keeps them intrigued!"
+                        resultCeleb = "Celebrities with cat-like traits: Hwang Min Hyun (NU'EST) - Aloof but secretly sweet, Xiumin (EXO) - Independent with a playful side, Kang Dong Won - Striking visuals with a soft heart, Lee Jong Suk - Cool exterior with a surprising goofiness, Lee Joon Gi - Mysterious aura with undeniable charisma"
                         gtag('event', 'Male Result: Cat', {'event_category': 'Male Results'});
                         break;
                     case "rabbit":
-                        resultTitle = "Innocently Charming Rabbit-like Appearance"
-                        resultExplain = "Your innocent charm and cheerfulness are contagious, making everyone around you happier. Your cute and pure demeanor naturally awakens a protective instinct in others.";
-                        resultCeleb = "Celebrities with rabbit-like traits: Jungkook (BTS), Bobby (iKON), Park Ji Hoon (Wanna One), Suho (EXO)";
+                        resultTitle = "Sunshine  Bunny: Hopping into Your Heart"
+                        resultExplain = "Your cheerful and innocent charm is like a ray of sunshine. You spread happiness wherever you go, and your cute demeanor makes everyone want to be your friend (with a big dose of protectiveness!)."
+                        resultCeleb = "Celebrities with rabbit-like traits: Jungkook (BTS) - Bunny smile that melts hearts, Bobby (iKON) - Full of energy and infectious positivity, Park Ji Hoon (Wanna One) - Cute and charming with a determined spirit, Suho (EXO) - Reliable leader with a bright personality"
                         gtag('event', 'Male Result: Rabbit', {'event_category': 'Male Results'});
                         break;
                     case "dinosaur":
-                        resultTitle = "Warm 'Bad Boy' Dinosaur-like Look"
-                        resultExplain = "You may seem indifferent and tough, but beneath lies a warmth that endears. Your tough charisma is hard to resist once someone gets close to you.";
-                        resultCeleb = "Celebrities with dinosaur-like traits: Yoon Doo Joon (Highlight), Lee Min Ki, Kim Woo Bin, Yook Sung Jae (BTOB), Gong Yoo";
+                        resultTitle: "The Brooding  Dino: A Gentle Giant with a Bite"
+                        resultExplain = "You might have a tough exterior, but you're a softie at heart. Your charismatic presence might seem intimidating at first, but those who get to know you discover your warm and caring side."
+                        resultCeleb = "Celebrities with dinosaur-like traits: Yoon Doo Joon (Highlight) - Strong and dependable leader, Lee Min Ki - Brooding good looks with a soft touch, Kim Woo Bin - Tough exterior with a surprising sweetness, Yook Sung Jae (BTOB) - Playful charisma with a protective streak, Gong Yoo - Mysterious aura with a gentle heart"
                         gtag('event', 'Male Result: Dinosaur', {'event_category': 'Male Results'});
                         break;
                     case "bear":
-                        resultTitle = "Cuddly Bear-like Appearance"
-                        resultExplain = "While you may appear intimidating initially, you are genuinely charming. Your meticulous and caring nature makes you a dependable presence for your partner.";
-                        resultCeleb = "Celebrities with bear-like traits: Ma Dong Seok, Cho Jin Woong, Jo Se Ho, Ahn Jae Hong";
+                        resultTitle = "The Big Teddy  Bear: A Huggable Protector"
+                        resultExplain = "You might seem a bit gruff on the outside, but you have a huge heart. You're meticulous and caring, making you a dependable rock for your partner."
+                        resultCeleb = "Celebrities with bear-like traits: Ma Dong Seok - Intimidating muscles with a surprisingly gentle soul, Cho Jin Woong - Gruff exterior with a hidden sense of humor, Jo Se Ho - Caring and dependable friend, Ahn Jae Hong - Supportive and reliable with a surprising sweetness"
                         gtag('event', 'Male Result: Bear', {'event_category': 'Male Results'});
                         break;
                     default:
@@ -233,32 +250,32 @@
                 });
                 switch (prediction[0].className) {
                     case "dog":
-                        resultTitle = "Adorable Dog-like Appearance";
-                        resultExplain = "You're affectionate and adorable, bringing joy to everyone around you! Your warm and active personality makes you immensely popular, and your playful nature makes you especially endearing to your partner. Just like a puppy, you become sad when you feel neglected.";
+                        resultTitle = "Adorable 🐶Dog-like Appearance";
+                        resultExplain = "You radiate sunshine and affection, making everyone feel like they just got belly rubs! Your playful spirit and loyalty are a guaranteed crowd-pleaser, especially with your significant other. Just remember, a neglected pup gets the zoomies, so don't leave you hanging for too long!";
                         resultCeleb = "Celebrities with dog-like traits: Park Bo Young, IU, Yoon Seung Ah, Minah (Girl's Day), Han Ji Min";
                         gtag('event', 'Female Result: Dog', {'event_category': 'Female Results'});
                         break;
                     case "cat":
-                        resultTitle = "Mysterious Cat-like Charm";
-                        resultExplain = "Though your initial impression may be aloof, your enigmatic charm is irresistibly appealing. You're proud yet affectionate and know how to demand attention from your partner with your cute antics. Your tsundere nature keeps your partner constantly fascinated.";
+                        resultTitle = "Mysterious 🐱Cat-like Charm";
+                        resultExplain = "You might seem aloof at first, but that only adds to your irresistible mystique. You're a purrfect blend of pride and affection, knowing how to subtly demand attention with your adorable antics. Your partner is constantly on their toes trying to decipher your tsundere ways, but that's what keeps them hooked!";
                         resultCeleb = "Celebrities with cat-like traits: Ahn So Hee (Wonder Girls), Oh Yeon Seo, Han Ye Seul, Lee Sung Kyung, Lee Hyori";
                         gtag('event', 'Female Result: Cat', {'event_category': 'Female Results'});
                         break;
                     case "rabbit":
-                        resultTitle = "Vibrantly Charming Rabbit-like Appearance";
-                        resultExplain = "Your vivacious and cute personality spreads happiness everywhere you go! Your curiosity and lively nature, along with your pure and innocent looks, naturally trigger a protective instinct.";
+                        resultTitle = "Vibrantly Charming 🐰Rabbit-like Appearance";
+                        resultExplain = "Get ready for a burst of sunshine! Your infectious energy and contagious cuteness spread happiness wherever you hop. Your innocent charm and inquisitive nature make you someone everyone wants to protect and cuddle.";
                         resultCeleb = "Celebrities with rabbit-like traits: Suzy, Nayeon (Twice), Yerin (GFriend), Han Seung Yeon (Kara), Moon Chae Won";
                         gtag('event', 'Female Result: Rabbit', {'event_category': 'Female Results'});
                         break;
                     case "deer":
-                        resultTitle = "Gentle and Elegant Deer-like Appearance";
-                        resultExplain = "You possess a clear and radiant aura, resembling a calm deer. Your sparkling eyes are your trademark, always conveying warmth and tenderness. Although shy in expressing affection, your warm personality captures your partner's heart.";
+                        resultTitle = "Gentle and Elegant 🦌Deer-like Appearance";
+                        resultExplain = "You possess a gentle elegance that draws people in. Your eyes sparkle with warmth and kindness, making you a true Bambi. While expressing your feelings might make you blush, your genuine personality shines through and captures everyone's heart.";
                         resultCeleb = "Celebrities with deer-like traits: Yoona (Girls' Generation), Lee Yeon Hee, Go Ara, Moon Geun Young, Jung Yoo Mi (Train to Busan actress)";
                         gtag('event', 'Female Result: Deer', {'event_category': 'Female Results'});
                         break;
                     case "fox":
-                        resultTitle = "Seductively Cunning Fox-like Appearance";
-                        resultExplain = "With your captivating charm, you're a master of playing hard to get, making it hard for others to approach. Your elegant appearance combined with your sharp sense enhances your standout personality. While you're outgoing and expressive in love, your expertise in 'push and pull' makes you irresistibly alluring.";
+                        resultTitle = "Seductively Cunning 🦊Fox-like Appearance";
+                        resultExplain = "There's a certain captivating magic about you. You're the master of playful teasing, keeping everyone guessing with your 'will they, won't they' vibe. Your sharp wit and stunning looks make you stand out from the crowd. In love, you're passionate and expressive, but know how to play the irresistible game of push and pull.";
                         resultCeleb = "Celebrities with fox-like traits: Kyungri (Nine Muses), Yeji (Itzy), Han Hye Jin (model), Heize, Jiyeon (T-ara)";
                         gtag('event', 'Female Result: Fox', {'event_category': 'Female Results'});
                         break;
@@ -268,6 +285,7 @@
                         resultCeleb = "";
                         gtag('event', 'Female Result: Unknown', {'event_category': 'Female Results'});
                 }
+
 
             }
             var title = "<div class='" + prediction[0].className + "-animal-title'>" + resultTitle + "</div>"
@@ -286,28 +304,28 @@
                 var labelTitle;
                 switch (prediction[i].className) {
                     case "dog":
-                        labelTitle = "Dog-like";
+                        labelTitle = "🐶"; // Dog emoji
                         break;
                     case "cat":
-                        labelTitle = "Cat-like";
+                        labelTitle = "🐱"; // Cat emoji
                         break;
                     case "rabbit":
-                        labelTitle = "Rabbit-like";
+                        labelTitle = "🐰"; // Rabbit emoji
                         break;
                     case "dinosaur":
-                        labelTitle = "Dinosaur-like";
+                        labelTitle = "🦖"; // Dinosaur emoji
                         break;
                     case "bear":
-                        labelTitle = "Bear-like";
+                        labelTitle = "🐻"; // Bear emoji
                         break;
                     case "deer":
-                        labelTitle = "Deer-like";
+                        labelTitle = "🦌"; // Deer emoji
                         break;
                     case "fox":
-                        labelTitle = "Fox-like";
+                        labelTitle = "🦊"; // Fox emoji
                         break;
                     default:
-                        labelTitle = "Unknown";
+                        labelTitle = "❓"; // Question mark emoji for unknown
                 }
 
                 var label = "<div class='animal-label d-flex align-items-center'>" + labelTitle + "</div>"

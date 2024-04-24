@@ -5,7 +5,7 @@ body {
     color: #35465d;
   }
   .file-upload {
-      padding: 15% 3%;
+      padding: 3% 3%;
       margin: 0 auto;
       border-radius: 10px;
       border: solid 1.5px #f6f7fa;
@@ -473,3 +473,20 @@ body {
   .ad-banner {
       max-width: 320px;
   }
+
+
+.emoji-display {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.emoji {
+    font-size: 48px;
+    margin: 0 10px;
+    vertical-align: middle;
+}
+
+.space {
+    margin-bottom: 100px; /* 원하는 만큼의 공간을 주세요 */
+  }
+  
