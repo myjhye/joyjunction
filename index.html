@@ -163,6 +163,14 @@
         $('.image-upload-wrap').bind('dragleave', function() {
             $('.image-upload-wrap').removeClass('image-dropping');
         });
+
+
+        //--- 결과 조회 후 다른 사진으로 재시도
+        function gaReload1() {
+            // 파일 업로드 섹션을 초기화
+            removeUpload();
+        }
+
     </script>
     <script type="text/javascript">
         let URL;
