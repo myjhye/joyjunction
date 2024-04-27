@@ -95,27 +95,33 @@
     </section>
     
     <!-- 이미지 업로드 / 이미지 업로드 결과 -->
-    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <div class="container file-upload">
+         <!-- 1. 파일 입력 -->
         <div class="image-upload-wrap">
             <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
             <div class="drag-text">
                 <img src="img/upload.svg" class="mt-5 pt-5 upload">
-                <h3 class="mb-5 pb-5 pt-4 upload-text">Click to upload <br /> your face photo!</h3>
+                <h3 class="mb-5 pb-5 pt-4 upload-text">Upload your photo to discover your animal match!</h3>
             </div>
         </div>
+        <!-- 2. 이미지 미리보기 / 분석 결과 등 -->
         <div class="file-upload-content">
+            <!-- 이미지 미리보기 -->
             <img class="file-upload-image" id="face-image" src="#" alt="your image" />
+            <!-- 로딩 -->
             <div id="loading" class="animated bounce">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
                 <p class="text-center">Hold tight! Our AI is sniffing out your spirit animal. 🔍🐾</p>
             </div>
+            <!-- 분석 결과1 -->
             <p class="result-message"></p>
+            <!-- 분석 결과2 -->
             <div id="label-container" class="d-flex flex-column justify-content-around"></div>
+            <!-- 소셜 공유 -->
             <div id="addThis" class="addthis_inline_share_toolbox_6lz1"></div>
-
+            <!-- 재시도 버튼 -->
             <div class="pt-3 image-title-wrap">
                 <button type="button p-2" class="try-again-btn" onclick="gaReload1();" data-toggle="modal" data-target="#adModal">
                     <span class="try-again-text">Try another photo</span>
@@ -138,50 +144,82 @@
         <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
     </noscript>
 
+    <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    
+    <!-- popper: 드롭다운 메뉴: 부트스트랩과 함께 사용 -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    
+    <!-- 부트스트랩: 네비게이션바, 결과 모달창 -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    
+    <!-- 텐서플로우: AI모델 로드: 사용자 이미지 분석 후 결과 표시 -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    
     <script>
-        //--- 이미지 업로드 / AI 모델 예측 기능
+        //이미지 업로드하고 미리보기 / AI로 사진 분석 처리 함수
         function readURL(input) {
+
+            // 파일 입력에 파일이 있는지 확인
             if (input.files && input.files[0]) {
+                // 파일 읽기
                 var reader = new FileReader();
+                // 파일 읽기가 완료되면 실행되는 핸들러
                 reader.onload = function(e) {
+                    // 파일 입력칸 숨김
                     $('.image-upload-wrap').hide();
+                    // 로딩 표시
                     $('#loading').show();
+                    // 읽은 이미지 파일 url로 변환 -> src에 삽입 -> 이미지 미리보기
                     $('.file-upload-image').attr('src', e.target.result);
+                    // 파일 업로드 결과 표시: 이미지 미리보기, 분석 결과, 공유 버튼 등
                     $('.file-upload-content').show();
-                    $('.image-title').html(input.files[0].name);
                 };
+
+                // url 형태로 이미지 파일 읽기
                 reader.readAsDataURL(input.files[0]);
+                
+                //**이미지 처리: 초기화 후 예측 함수 호출
                 init().then(function() {
                     console.log("hello");
+                    //  
                     predict();
+                    // 로딩 숨김
                     $('#loading').hide();
                 });
             } else {
+                // 파일이 선택되지 않았을 경우 UI 초기화
                 removeUpload();
             }
         }
 
+        // 파일 업로드 취소 함수
         function removeUpload() {
+            // 파일 입력칸을 새로 복제해 교체
             $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+            // 결과 이미지 숨김
             $('.file-upload-content').hide();
+            // 파일 업로드 다시 표시
             $('.image-upload-wrap').show();
         }
+
+        // 파일 드래그 시 발생 이벤트
         $('.image-upload-wrap').bind('dragover', function() {
+            // 파일이 드래그 되고 있음을 화면에 표시
             $('.image-upload-wrap').addClass('image-dropping');
         });
+
+        // 파일 드래그가 끝나고 영역을 벗어났을 때 발생 이벤트
         $('.image-upload-wrap').bind('dragleave', function() {
+            // 파일 드래그 상태 표시 제거
             $('.image-upload-wrap').removeClass('image-dropping');
         });
 
 
-        //--- 결과 조회 후 다른 사진으로 재시도
+        // 결과 조회 후 다른 사진으로 재시도
         function gaReload1() {
-            // 파일 업로드 섹션을 초기화
+            // 파일 업로드 취소
             removeUpload();
         }
 
@@ -192,39 +230,58 @@
         const urlMale = "https://teachablemachine.withgoogle.com/models/o9D1N5TN/";
         const urlFemale = "https://teachablemachine.withgoogle.com/models/bB3YHn5r/";
         let model, webcam, labelContainer, maxPredictions;
+        
+        //** AI모델 초기화면 로딩: teachable machine에 등록한 클래스들 다 가져오기
         async function init() {
+
+            // 선택된 성별에 따라 URL 설정
             if (document.getElementById("gender").checked) {
                 URL = urlMale;
             } else {
                 URL = urlFemale;
             }
+
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
+
+            // Teachable Machine 라이브러리를 사용해 AI모델 실행
             model = await tmImage.load(modelURL, metadataURL);
+            // 모델에서 사용 가능한 클래스 총 숫자
             maxPredictions = model.getTotalClasses();
+            // 결과를 표시할 컨테이너
             labelContainer = document.getElementById("label-container");
+            // 클래스 수만큼 컨테이너에서 요소를 동적으로 추가
             for (let i = 0; i < maxPredictions; i++) {
                 var element = document.createElement("div")
                 element.classList.add("d-flex");
                 labelContainer.appendChild(element);
             }
         }
+
+        //**업로드된 이미지 예측 함수
         async function predict() {
+            // 업로드된 이미지 가져오기
             var image = document.getElementById("face-image");
+            //** 예측 실행
             const prediction = await model.predict(image, false);
+            // 확률을 내림차순으로 정렬
             prediction.sort((a, b) => parseFloat(b.probability) - parseFloat(a.probability));
+            // 가장 높은 확률의 클래스 이름을 로그로 출력: 디버깅
             console.log(prediction[0].className);
+
             var resultTitle, resultExplain, resultCeleb;
             if (document.getElementById("gender").checked) {
                 gtag('event', 'Animal Face Test Executed', {
                     'event_category': 'Animal Face Test Executed',
                     'event_label': 'Male'
                 });
+                // 예측된 클래스 이름에 따라 다른 결과 제공
                 switch (prediction[0].className) {
                     case "dog":
                         resultTitle = "Loyal  Doggo: Your Tail Wags for Love!"
                         resultExplain = "You're a man's best friend... literally! Your affectionate and playful personality makes you irresistible, especially to your partner. Like a loyal pup, you shower them with love and attention, and expect the same in return. Just don't leave you hanging for too long, or you might unleash your inner zoomies!"
                         resultCeleb = "Celebrities with dog-like traits: Kang Daniel - Golden Retriever energy, Baekhyun (EXO) - Playful and full of surprises, Park Bo Gum - Makes everyone smile with his sunshine personality, Song Joong Ki - Everyone's loyal companion"
+                        // 구글애널리틱스 이벤트 기록: 성과 측정용
                         gtag('event', 'Male Result: Dog', {'event_category': 'Male Results'});
                         break;
                     case "cat":
@@ -258,9 +315,9 @@
                         gtag('event', 'Male Result: Unknown', {'event_category': 'Male Results'});
                 }
             } else {
-                gtag('event', '동물상 테스트 수행', {
-                    'event_category': '동물상 테스트 수행',
-                    'event_label': '여자'
+                gtag('event', 'Animal Face Test Executed', {
+                    'event_category': 'Animal Face Test Executed',
+                    'event_label': 'Female'
                 });
                 switch (prediction[0].className) {
                     case "dog":
@@ -299,13 +356,16 @@
                         resultCeleb = "";
                         gtag('event', 'Female Result: Unknown', {'event_category': 'Female Results'});
                 }
-
-
             }
+
+            // 결과 메세지를 화면에 표시
             var title = "<div class='" + prediction[0].className + "-animal-title'>" + resultTitle + "</div>"
             var explain = "<div class='animal-explain pt-2'>" + resultExplain + "</div>"
             var celeb = "<div class='" + prediction[0].className + "-animal-celeb pt-2 pb-2'>" + resultCeleb + "</div>"
             $('.result-message').html(title + explain + celeb);
+            
+            
+            // 예측 결과 확률에 따라 바 너비 설정
             var barWidth;
             for (let i = 0; i < maxPredictions; i++) {
                 if (prediction[i].probability.toFixed(2) > 0.1) {
@@ -315,6 +375,8 @@
                 } else {
                     barWidth = "2%"
                 }
+
+                // 각 예측 결과에 대한 '동물'과 '확률바' 설정
                 var labelTitle;
                 switch (prediction[i].className) {
                     case "dog":
@@ -342,8 +404,17 @@
                         labelTitle = "❓"; // Question mark emoji for unknown
                 }
 
+                // 동물
                 var label = "<div class='animal-label d-flex align-items-center'>" + labelTitle + "</div>"
-                var bar = "<div class='bar-container position-relative container'><div class='" + prediction[i].className + "-box'></div><div class='d-flex justify-content-center align-items-center " + prediction[i].className + "-bar' style='width: " + barWidth + "'><span class='d-block percent-text'>" + Math.round(prediction[i].probability.toFixed(2) * 100) + "%</span></div></div>"
+                // 확률바
+                var bar = "<div class='bar-container position-relative container'>"
+                    // 각 예측 결과에 대한 스타일을 적용하는 박스 추가   
+                    + "<div class='" + prediction[i].className + "-box'></div>"
+                    // 확률 값에 따라 너비가 조정되는 확률바 생성
+                    + "<div class='d-flex justify-content-center align-items-center " + prediction[i].className + "-bar' style='width: " + barWidth + "'>"
+                    // 바 내부에 확률 값을 백분율로 표시하는 텍스트를 추가       
+                    + "<span class='d-block percent-text'>" + Math.round(prediction[i].probability.toFixed(2) * 100) + "%</span></div></div>";  
+                // 생성된 동물과 바를 화면의 labelContainer에 삽입해 표시
                 labelContainer.childNodes[i].innerHTML = label + bar;
             }
         }
