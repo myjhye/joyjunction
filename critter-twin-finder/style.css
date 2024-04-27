@@ -490,3 +490,26 @@ body {
     margin-bottom: 100px; /* 원하는 만큼의 공간을 주세요 */
   }
   
+  /* 소셜 공유 버튼 */
+  .social-share-buttons button {
+    border: 2px solid gray;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 19px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.social-share-buttons button:hover {
+    background-color: #808080;
+}
+
+.icon {
+    height: 25px; /* 아이콘 크기 조절 */
+    vertical-align: middle; /* 버튼 텍스트와 아이콘의 수직 정렬 */
+    margin-right: 8px; /* 아이콘과 텍스트 사이의 마진 */
+}

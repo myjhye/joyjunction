@@ -18,8 +18,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <!-- addThis: 소셜 공유 용도 -->
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e64b3727e862b06"></script>
+
     <!-- Global site tag (gtag.js): Google Analytics를 페이지에 통합해 방문자의 웹 사용 방식(행동), 트래픽 추적 (마케팅 전략용) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145482737-6"></script>
     <!-- Google Analytics 스크립트: 방문자 추적용 -->
@@ -101,7 +100,7 @@
             <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
             <div class="drag-text">
                 <img src="img/upload.svg" class="mt-5 pt-5 upload">
-                <h3 class="mb-5 pb-5 pt-4 upload-text">Upload your photo to discover your animal match!</h3>
+                <h3 class="mb-5 pb-5 pt-4 upload-text">Upload or Drag your photo to discover your animal match!</h3>
             </div>
         </div>
         <!-- 2. 이미지 미리보기 / 분석 결과 등 -->
@@ -119,12 +118,24 @@
             <p class="result-message"></p>
             <!-- 분석 결과2 -->
             <div id="label-container" class="d-flex flex-column justify-content-around"></div>
-            <!-- 소셜 공유 -->
-            <div id="addThis" class="addthis_inline_share_toolbox_6lz1"></div>
             <!-- 재시도 버튼 -->
             <div class="pt-3 image-title-wrap">
                 <button type="button p-2" class="try-again-btn" onclick="gaReload1();" data-toggle="modal" data-target="#adModal">
                     <span class="try-again-text">Try another photo</span>
+                </button>
+            </div>
+            <!-- 소셜 미디어 공유 & url 복사 버튼 -->
+            <div class="social-share-buttons" style="margin-top: 25px;">
+                <button onclick="shareOnFacebook()">
+                    <img src='https://i.postimg.cc/d1cy6WTT/pngwing-com.png' alt="Facebook Icon" class="icon">
+                    Share on Facebook
+                </button>
+                <button onclick="shareOnTwitter()">
+                    <img src='https://i.postimg.cc/hjX58tTG/pngwing-com-1.png' alt="Twitter Icon" class="icon">
+                    Tweet on Twitter
+                </button>
+                <button id="copyButton" onclick="copyURL()" title="Copy URL">
+                    📋 Copy URL
                 </button>
             </div>
         </div>
@@ -158,41 +169,36 @@
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
     
     <script>
-        //이미지 업로드하고 미리보기 / AI로 사진 분석 처리 함수
+        //이미지 업로드하고 미리보기 / 예측처리하는 함수
         function readURL(input) {
-
-            // 파일 입력에 파일이 있는지 확인
             if (input.files && input.files[0]) {
-                // 파일 읽기
                 var reader = new FileReader();
-                // 파일 읽기가 완료되면 실행되는 핸들러
                 reader.onload = function(e) {
-                    // 파일 입력칸 숨김
+                    // 파일 업로드 UI 초기화
                     $('.image-upload-wrap').hide();
-                    // 로딩 표시
                     $('#loading').show();
-                    // 읽은 이미지 파일 url로 변환 -> src에 삽입 -> 이미지 미리보기
+
+                    // 이미지 미리보기를 업데이트
                     $('.file-upload-image').attr('src', e.target.result);
-                    // 파일 업로드 결과 표시: 이미지 미리보기, 분석 결과, 공유 버튼 등
                     $('.file-upload-content').show();
+
+                    // 이전 결과 데이터 초기화
+                    $('.result-message').empty(); // 결과 메시지를 비움
+                    $('#label-container').empty(); // 라벨 컨테이너를 비움
+
+                    // 모델 초기화 및 예측 실행
+                    init().then(function() {
+                        predict();
+                        $('#loading').hide();
+                    });
                 };
 
-                // url 형태로 이미지 파일 읽기
                 reader.readAsDataURL(input.files[0]);
-                
-                //**이미지 처리: 초기화 후 예측 함수 호출
-                init().then(function() {
-                    console.log("hello");
-                    //  
-                    predict();
-                    // 로딩 숨김
-                    $('#loading').hide();
-                });
             } else {
-                // 파일이 선택되지 않았을 경우 UI 초기화
                 removeUpload();
             }
         }
+
 
         // 파일 업로드 취소 함수
         function removeUpload() {
@@ -223,7 +229,38 @@
             removeUpload();
         }
 
+        function shareOnFacebook() {
+            var url = window.location.href; // 이 페이지의 URL을 사용
+            var shareUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+            window.open(shareUrl, "Facebook Share", "width=600,height=400");
+        }
+
+        function shareOnTwitter() {
+            var url = window.location.href;
+            var text = "Discover your animal twin with our AI-driven face analysis!";
+            var shareUrl = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text);
+            window.open(shareUrl, "Twitter Tweet", "width=600,height=300");
+        }
+
+        function copyURL() {
+            const url = window.location.href;
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            // 버튼의 내용을 체크 이모지로 변경
+            document.getElementById('copyButton').innerHTML = '✔️ Copied';
+
+            // 3초 후 원래 이모지로 복구
+            setTimeout(() => {
+                document.getElementById('copyButton').innerHTML = '📋 Copy URL';
+            }, 3000);
+        }
     </script>
+    
     <script type="text/javascript">
         // Teachable Machine과 연동된 성별 기반 AI 모델 선택 / 결과
         let URL;
