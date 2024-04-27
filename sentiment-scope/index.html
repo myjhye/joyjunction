@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Sentiment Scope</title>
+    <meta name="title" content="Sentiment Scope">
+    <meta name="subject" content="Analyze your emotional expressions with our AI-driven face analysis!">
+    <meta name="keywords" content="facial sentiment analysis, emotion recognition, AI emotion detection, facial expression analysis, face sentiment, emotion analysis, AI facial analysis">
+    <meta name="author" content="J">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145482737-6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-145482737-6');
+    </script>
+</head>
+<body>
+    <nav class="p-3 container navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/">JoyJunction</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/critter-twin-finder">Critter Twin Finder</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sentiment-scope">Sentiment Scope</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section class="section">
+        <h1 class="title">🔍 Sentiment Scope 🔍</h1>
+        <h2 class="subtitle">Uncover the Sentiments Reflected in Your Face!</h2>
+        <div class="emoji-display">
+            <span class="emoji">😊</span> <!-- Happy -->
+            <span class="emoji">😢</span> <!-- Sad -->
+            <span class="emoji">😡</span> <!-- Angry -->
+            <span class="emoji">😱</span> <!-- Surprised -->
+            <span class="emoji">😐</span> <!-- Neutral -->
+        </div>
+    </section>
+    <div class="container file-upload">
+        <div class="image-upload-wrap">
+            <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+            <div class="drag-text">
+                <img src="img/upload.svg" class="mt-5 pt-5 upload">
+                <h3 class="mb-5 pb-5 pt-4 upload-text">Upload or Drag your photo to analyze your sentiment!</h3>
+            </div>
+        </div>
+        <div class="file-upload-content">
+            <img class="file-upload-image" id="face-image" src="#" alt="your image" />
+            <div id="loading" class="animated bounce">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p class="text-center">Hold tight! Our AI is analyzing the sentiment of your facial expressions. 🔍</p>
+            </div>
+            <p class="result-message"></p>
+            <div id="label-container" class="d-flex flex-column justify-content-around"></div>
+            <div class="pt-3 image-title-wrap">
+                <button type="button p-2" class="try-again-btn" onclick="gaReload1();" data-toggle="modal" data-target="#adModal">
+                    <span class="try-again-text">Try another photo</span>
+                </button>
+            </div>
+            <div class="social-share-buttons" style="margin-top: 25px;">
+                <button onclick="shareOnFacebook()">
+                    <img src='https://i.postimg.cc/d1cy6WTT/pngwing-com.png' alt="Facebook Icon" class="icon">
+                    Share on Facebook
+                </button>
+                <button onclick="shareOnTwitter()">
+                    <img src='https://i.postimg.cc/hjX58tTG/pngwing-com-1.png' alt="Twitter Icon" class="icon">
+                    Tweet on Twitter
+                </button>
+                <button id="copyButton" onclick="copyURL()" title="Copy URL">📋 Copy URL</button>
+            </div>
+        </div>
+    </div>
+    <footer class="footer pt-5 container d-flex justify-content-center">
+        <div>
+            <p>&copy; J 2024. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.image-upload-wrap').hide();
+                    $('#loading').show();
+                    $('.file-upload-image').attr('src', e.target.result);
+                    $('.file-upload-content').show();
+                    $('.result-message').empty();
+                    $('#label-container').empty();
+                    init().then(function() {
+                        predict();
+                        $('#loading').hide();
+                    });
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                removeUpload();
+            }
+        }
+        function removeUpload() {
+            $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+            $('.file-upload-content').hide();
+            $('.image-upload-wrap').show();
+        }
+        $('.image-upload-wrap').bind('dragover', function() {
+            $('.image-upload-wrap').addClass('image-dropping');
+        });
+        $('.image-upload-wrap').bind('dragleave', function() {
+            $('.image-upload-wrap').removeClass('image-dropping');
+        });
+        function gaReload1() {
+            removeUpload();
+        }
+        function shareOnFacebook() {
+            var url = window.location.href;
+            var shareUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+            window.open(shareUrl, "Facebook Share", "width=600,height=400");
+        }
+        function shareOnTwitter() {
+            var url = window.location.href;
+            var text = "Discover your animal twin with our AI-driven face analysis!";
+            var shareUrl = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text);
+            window.open(shareUrl, "Twitter Tweet", "width=600,height=300");
+        }
+        function copyURL() {
+            const url = window.location.href;
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            document.getElementById('copyButton').innerHTML = '✔️ Copied';
+            setTimeout(() => {
+                document.getElementById('copyButton').innerHTML = '📋 Copy URL';
+            }, 3000);
+        }
+        let URL = "https://teachablemachine.withgoogle.com/models/G7X-pKcb9/";
+        let model, labelContainer, maxPredictions;
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                var element = document.createElement("div")
+                element.classList.add("d-flex");
+                labelContainer.appendChild(element);
+            }
+        }
+        async function predict() {
+            var image = document.getElementById("face-image");
+            const prediction = await model.predict(image, false);
+            prediction.sort((a, b) => parseFloat(b.probability) - parseFloat(a.probability));
+
+            $('#label-container').empty(); // Clear previous labels
+
+            prediction.forEach((pred) => {
+                const className = pred.className;
+                const probability = pred.probability;
+
+                // Calculate bar width based on probability
+                let barWidth = Math.round(probability * 100) + "%";
+
+                // Create label for the class
+                const label = $("<div>").addClass('animal-label d-flex align-items-center').text(className + ": ");
+
+                // Create progress bar
+                const progressBar = $("<div>").addClass('progress-bar')
+                                            .css({
+                                                'width': barWidth,
+                                                'background-color': '#4CAF50'
+                                            })
+                                            .text(barWidth);
+
+                const barContainer = $("<div>").addClass('progress')
+                                            .css({
+                                                'width': '100%',
+                                                'background-color': '#ddd'
+                                            })
+                                            .append(progressBar);
+
+                // Append the label and the progress bar to the label container
+                $('#label-container').append(label, barContainer);
+            });
+        }
+
+    </script>
+</body>
+</html>
