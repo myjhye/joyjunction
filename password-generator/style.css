@@ -1,0 +1,61 @@
+/* style.css for Password Generator */
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #ffffff;
+    color: #35465d;
+    box-sizing: border-box;
+}
+
+/* Navbar styles */
+.navbar {
+    padding: 0.5rem 1rem;
+    background-color: #f6f7fa;
+}
+
+.navbar-light .navbar-brand {
+    line-height: 1.68;
+    color: #35465d;
+}
+
+.navbar-light .navbar-toggler {
+    border-color: #ffffff;
+}
+
+/* Footer styles */
+.footer {
+    margin-top: 50px;
+    text-align: center;
+    color: #777;
+}
+
+/* Button styles - Maintaining original styles from Password Generator */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-copy {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-copy:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Media queries for responsive adjustments */
+@media screen and (max-width: 600px) {
+    html {
+        font-size: 10px;
+    }
+
+    .navbar-brand {
+        font-size: 2rem;
+    }
+}
