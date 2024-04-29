@@ -28,15 +28,20 @@ body {
     color: #777;
 }
 
-/* Button styles - Maintaining original styles from Password Generator */
+/* Button styles adapted from Critter Twin Finder for consistency */
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #007bff; /* Blue background for primary button */
+    border-color: #007bff; /* Border color matches background */
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase; /* Capitalized text for better visibility */
+    transition: all .2s ease; /* Smooth transition for hover effects */
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #004085;
+    background-color: #0056b3; /* Darker blue on hover for visual feedback */
+    border-color: #004085; /* Corresponding darker border color */
 }
 
 .btn-copy {
