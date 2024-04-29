@@ -41,7 +41,6 @@
         </div>
     </nav>
 
-
     <div class="container mt-5">
         <h1>Password Generator</h1>
         <div class="form-group">
@@ -74,7 +73,9 @@
                 </div>
             </div>
         </div>
+        <small id="lengthWarning" class="form-text text-muted"></small>
     </div>
+
 
     <footer class="footer pt-5 container d-flex justify-content-center">
         <div>
@@ -99,6 +100,11 @@
             if (includeNumbers) validChars += numbers;
             if (includeSymbols) validChars += symbols;
 
+            if (!validChars.length) {
+                document.getElementById('lengthWarning').textContent = 'Please select at least one character type.';
+                return;
+            }
+
             let generatedPassword = '';
             for (let i = 0; i < length; i++) {
                 const index = Math.floor(Math.random() * validChars.length);
@@ -106,6 +112,7 @@
             }
 
             document.getElementById('generatedPassword').value = generatedPassword;
+            document.getElementById('lengthWarning').textContent = ''; // Clear warning
         }
 
         function copyPassword() {

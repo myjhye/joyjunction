@@ -64,3 +64,19 @@ body {
         font-size: 2rem;
     }
 }
+
+.form-check-label::before {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid #adb5bd;
+    border-radius: 0.25rem;
+    content: '';
+    display: inline-block;
+    margin-right: 0.25rem;
+    position: relative;
+    top: 0.15rem;
+}
+.form-check-input:checked + .form-check-label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+}
