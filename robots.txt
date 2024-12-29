@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://joyjunction.pro/sitemap.xml
